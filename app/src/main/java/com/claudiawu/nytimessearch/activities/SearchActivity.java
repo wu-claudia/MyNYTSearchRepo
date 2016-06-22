@@ -12,10 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.claudiawu.nytimessearch.models.Article;
 import com.claudiawu.nytimessearch.ArticleArrayAdapter;
 import com.claudiawu.nytimessearch.EndlessRecyclerViewScrollListener;
 import com.claudiawu.nytimessearch.R;
+import com.claudiawu.nytimessearch.models.Article;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -40,6 +40,7 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
     String searchWord;
+    //MenuItem miActionProgressItem;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     //@BindView(R.id.rvResults) RecyclerView rvResults;
@@ -130,6 +131,8 @@ public class SearchActivity extends AppCompatActivity {
     public void onSearch(final int page) {
         //String query = etQuery.getText().toString();
 
+        //showProgressBar();
+
         //Toast.makeText(this, "Searching for" + query, Toast.LENGTH_SHORT).show();
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -144,7 +147,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 //Log.d("DEBUG",response.toString());
                 JSONArray articleJsonResults = null;
-
+                //hideProgressBar();
                 try {
                     if (page == 0) {
                         articles.clear();
