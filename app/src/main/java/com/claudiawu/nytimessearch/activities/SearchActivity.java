@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.claudiawu.nytimessearch.Article;
+import com.claudiawu.nytimessearch.models.Article;
 import com.claudiawu.nytimessearch.ArticleArrayAdapter;
 import com.claudiawu.nytimessearch.EndlessRecyclerViewScrollListener;
 import com.claudiawu.nytimessearch.R;
@@ -26,25 +26,32 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class SearchActivity extends AppCompatActivity {
 
     //EditText etQuery;
-    RecyclerView rvResults;
     //Button btnSearch;
+    RecyclerView rvResults;
 
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
     String searchWord;
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    //@BindView(R.id.rvResults) RecyclerView rvResults;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         setupViews();
     }
 
@@ -56,7 +63,7 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new ArticleArrayAdapter(articles);
         rvResults.setItemAnimator(new SlideInUpAnimator());
         rvResults.setAdapter(adapter);
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         rvResults.setLayoutManager(gridLayoutManager);
         rvResults.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override

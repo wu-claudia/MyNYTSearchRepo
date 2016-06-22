@@ -11,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.claudiawu.nytimessearch.activities.ArticleActivity;
+import com.claudiawu.nytimessearch.models.Article;
 import com.squareup.picasso.Picasso;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -52,7 +55,7 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
             // get the article to display
             Article article = articles.get(position);
             // pass in that article into intent
-            i.putExtra("article",article);
+            i.putExtra("article", Parcels.wrap(article));
             // launch the activity
             view.getContext().startActivity(i);
         }

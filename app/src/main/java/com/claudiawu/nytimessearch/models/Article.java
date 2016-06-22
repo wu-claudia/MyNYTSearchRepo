@@ -1,17 +1,27 @@
-package com.claudiawu.nytimessearch;
+package com.claudiawu.nytimessearch.models;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Article implements Serializable{
+@Parcel
+public class Article {
 
     String webUrl;
     String headline;
     String thumbNail;
+
+    public Article() {
+    }
+
+    public Article(String webUrl, String headline, String thumbNail) {
+        this.webUrl = webUrl;
+        this.headline = headline;
+        this.thumbNail = thumbNail;
+    }
 
     public String getThumbNail() {
         return thumbNail;

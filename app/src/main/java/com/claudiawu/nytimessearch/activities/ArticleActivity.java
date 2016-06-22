@@ -12,10 +12,19 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.claudiawu.nytimessearch.Article;
 import com.claudiawu.nytimessearch.R;
+import com.claudiawu.nytimessearch.models.Article;
+
+import org.parceler.Parcels;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ArticleActivity extends AppCompatActivity {
+
+    @BindView(R.id.wvArticle) WebView webView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,19 +33,22 @@ public class ArticleActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Article article = (Article) getIntent().getSerializableExtra("article");
-
+        Article article = Parcels.unwrap(getIntent().getParcelableExtra("article"));
         WebView webView = (WebView) findViewById(R.id.wvArticle);
 
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-        });
+        if (webView != null) {
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }
+            });
 
-        webView.loadUrl(article.getWebUrl());
+            String url = article.getWebUrl();
+            webView.loadUrl(url);
+        }
+        ButterKnife.bind(this);
     }
 
     @Override
@@ -50,10 +62,10 @@ public class ArticleActivity extends AppCompatActivity {
         shareIntent.setType("text/plain");
 
         // get reference to WebView
-        WebView wvArticle = (WebView) findViewById(R.id.wvArticle);
+        WebView webView = (WebView) findViewById(R.id.wvArticle);
         // pass in the URL currently being used by the WebView
-        if (wvArticle != null) {
-            shareIntent.putExtra(Intent.EXTRA_TEXT, wvArticle.getUrl());
+        if (webView != null) {
+            shareIntent.putExtra(Intent.EXTRA_TEXT, webView.getUrl());
         }
 
         miShare.setShareIntent(shareIntent);
