@@ -82,16 +82,19 @@ public class FilterActivity extends AppCompatActivity {
             case R.id.checkbox_arts:
                 if (checked) {
                     isArts = true;
+                    //Toast.makeText(getApplicationContext(),"Chose arts!", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.checkbox_fashion:
                 if (checked) {
                     isFashion = true;
+                    //Toast.makeText(getApplicationContext(),"Chose fashion!", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.checkbox_sports:
                 if (checked) {
                     isSports = true;
+                    //Toast.makeText(getApplicationContext(),"Chose sports!", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

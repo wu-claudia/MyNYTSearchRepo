@@ -7,25 +7,32 @@
     android:paddingRight="10dp"
     android:paddingLeft="10dp">
 
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ivImage"
-        android:scaleType="center"
-        android:background="#FFF"
-        android:layout_gravity="center"
-        android:paddingTop="5dp"/>
+        android:background="@drawable/rounded_corner"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivImage"
+            android:scaleType="center"
+            android:layout_gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="3"
-        android:ellipsize="end"
-        android:text="TextView"
-        android:id="@+id/tvTitle"
-        android:background="#FFF"
-        android:paddingBottom="5dp"
-        android:paddingRight="5dp"
-        android:paddingLeft="5dp"
-        android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:text="TextView"
+            android:id="@+id/tvTitle"
+            android:layout_below="@+id/ivImage"
+            android:paddingBottom="5dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
 </LinearLayout>

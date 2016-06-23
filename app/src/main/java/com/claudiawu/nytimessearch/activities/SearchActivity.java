@@ -49,6 +49,8 @@ public class SearchActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 50;
     boolean hasFilter = false;
     Filter filter;
+    //ProgressDialog pd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,10 @@ public class SearchActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+//        pd = new ProgressDialog(this);
+//        pd.setTitle("Loading...");
+//        pd.setMessage("Please wait.");
+//        pd.setCancelable(false);
         setupViews();
     }
 
@@ -165,7 +171,7 @@ public class SearchActivity extends AppCompatActivity {
         //String query = etQuery.getText().toString();
 
         //showProgressBar();
-
+        //pd.show();
         //Toast.makeText(this, "Searching for" + query, Toast.LENGTH_SHORT).show();
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -181,6 +187,7 @@ public class SearchActivity extends AppCompatActivity {
                 //Log.d("DEBUG",response.toString());
                 JSONArray articleJsonResults = null;
                 //hideProgressBar();
+                //pd.hide();
                 try {
                     if (page == 0) {
                         articles.clear();
@@ -200,6 +207,7 @@ public class SearchActivity extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
+        //pd.show();
         RequestParams params = new RequestParams();
         params.put("api-key","121eaa96660c4f1a85c295140fd9d8df");
         params.put("page",page);
@@ -213,6 +221,7 @@ public class SearchActivity extends AppCompatActivity {
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         //Log.d("DEBUG",response.toString());
                         JSONArray articleJsonResults = null;
+                        //pd.dismiss();
                         //hideProgressBar();
                         try {
                             if (page == 0) {

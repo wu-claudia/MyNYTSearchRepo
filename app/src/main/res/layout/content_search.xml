@@ -15,5 +15,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="onArticleSearch"
-        android:background="#000"/>
+        android:background="#f7f6f3"/>
+
 </RelativeLayout>
