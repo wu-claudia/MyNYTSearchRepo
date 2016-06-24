@@ -26,19 +26,13 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
         this.articles = articles;
     }
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
+
         public TextView tvTitle;
         public ImageView ivImage;
 
-        // We also create a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
-            // Stores the itemView in a public final member variable that can be used
-            // to access the context from any ViewHolder instance.
+
             super(itemView);
 
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
@@ -49,14 +43,14 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
         @ Override
         public void onClick(View view) {
             int position = getLayoutPosition(); // gets item position
-            // We can access the data within the views
+
             //Toast.makeText(view.getContext(), article.getHeadline(), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(view.getContext(), ArticleActivity.class);
-            // get the article to display
+
             Article article = articles.get(position);
-            // pass in that article into intent
+
             i.putExtra("article", Parcels.wrap(article));
-            // launch the activity
+
             view.getContext().startActivity(i);
         }
     }

@@ -11,6 +11,7 @@
     <string name="filter">Filter</string>
     <string name="values">News Desk Values</string>
     <string name="sort">Sort Order</string>
+    <string name="top_stories">Top Stories</string>
     <string name="date">Begin Date</string>
     <string-array name="sort_arrays">
         <item>Newest</item>

@@ -25,6 +25,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -47,8 +48,9 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     //@BindView(R.id.rvResults) RecyclerView rvResults;
     private final int REQUEST_CODE = 50;
-    boolean hasFilter = false;
+    //boolean hasFilter = false;
     Filter filter;
+    String API_KEY = "121eaa96660c4f1a85c295140fd9d8df";
     //ProgressDialog pd;
 
 
@@ -59,7 +61,8 @@ public class SearchActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        filter = new Filter();
+        fetchArticles(0,filter);
 //        pd = new ProgressDialog(this);
 //        pd.setTitle("Loading...");
 //        pd.setMessage("Please wait.");
@@ -80,19 +83,9 @@ public class SearchActivity extends AppCompatActivity {
         rvResults.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if (hasFilter) {
-                    customLoadMoreDataFromApi(page,filter);
-                }
-                customLoadMoreDataFromApi(page);
+                customLoadMoreDataFromApi(page,filter);
             }
         });
-    }
-
-    // Append more data into the adapter
-    public void customLoadMoreDataFromApi(int page) {
-        onSearch(page);
-        int curSize = adapter.getItemCount();
-        adapter.notifyItemRangeInserted(curSize, articles.size() - 1);
     }
 
     public void customLoadMoreDataFromApi(int page, Filter filter) {
@@ -112,9 +105,8 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
                 searchWord = query;
-                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
-                // see https://code.google.com/p/android/issues/detail?id=24599
-                onSearch(0);
+
+                fetchArticles(0,filter);
                 searchView.clearFocus();
 
                 return true;
@@ -131,12 +123,8 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -150,57 +138,19 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onArticleSearch(View view) {
-        onSearch(0);
+        fetchArticles(0,filter);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            filter = (Filter) data.getSerializableExtra("filter");
-            if (filter != null) {
-                hasFilter = true;
-            }
-            setupViews();
-            // network request for results - would do adapter stuff for you
-            //rvResults.setAdapter(adapter);
-            //adapter.notifyDataSetChanged();
+            // filter = (Filter) data.getSerializableExtra("filter");
+            filter = Parcels.unwrap(data.getParcelableExtra("filter"));
+            //Toast.makeText(this,filter.getBeginDate(),Toast.LENGTH_SHORT).show();
+            articles.clear();
+            adapter.notifyDataSetChanged();
+            fetchArticles(0,filter);
         }
-    }
-
-    public void onSearch(final int page) {
-        //String query = etQuery.getText().toString();
-
-        //showProgressBar();
-        //pd.show();
-        //Toast.makeText(this, "Searching for" + query, Toast.LENGTH_SHORT).show();
-        AsyncHttpClient client = new AsyncHttpClient();
-        String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
-
-        RequestParams params = new RequestParams();
-        params.put("api-key","121eaa96660c4f1a85c295140fd9d8df");
-        params.put("page",page);
-        params.put("q",searchWord);
-
-        client.get(url,params,new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                //Log.d("DEBUG",response.toString());
-                JSONArray articleJsonResults = null;
-                //hideProgressBar();
-                //pd.hide();
-                try {
-                    if (page == 0) {
-                        articles.clear();
-                    }
-                    articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
-                    articles.addAll(Article.fromJSONArray(articleJsonResults));
-                    adapter.notifyDataSetChanged();
-                    Log.d("DEBUG",articles.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     public void fetchArticles(final int page, Filter filter) {
@@ -208,14 +158,28 @@ public class SearchActivity extends AppCompatActivity {
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
         //pd.show();
-        RequestParams params = new RequestParams();
-        params.put("api-key","121eaa96660c4f1a85c295140fd9d8df");
+        final RequestParams params = new RequestParams();
+        params.put("api-key",API_KEY);
         params.put("page",page);
-        params.put("q",searchWord);
-        if (filter != null) {
-            params.put("fq","news_desk: (" + filter.getNews_desk() + ")");
+        if (searchWord != null) {
+            params.put("q",searchWord);
+        } else {
+            params.put("callback","callbackTopStories");
         }
 
+        if (filter != null && filter.getArrayNewsDesk() != null) {
+            params.put("fq",filter.getNewsDesk());
+        }
+
+        if (filter != null && filter.getSpinnerVal() != null) {
+            params.put("sort",filter.getSpinnerVal());
+        }
+
+        if (filter != null && filter.getBeginDate() != null) {
+            params.put("begin_date",filter.getBeginDate());
+        }
+        //Toast.makeText(this,params.toString(),Toast.LENGTH_SHORT).show();
+        //Log.d("url",url+params);
                 client.get(url,params,new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -234,6 +198,11 @@ public class SearchActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject response) {
+                        Log.d("On Failure:",params.toString());
                     }
                 });
     }
