@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import com.claudiawu.nytimessearch.R;
 import com.claudiawu.nytimessearch.models.Article;
@@ -24,6 +25,7 @@ public class ArticleActivity extends AppCompatActivity {
 
     @BindView(R.id.wvArticle) WebView webView;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    ProgressBar pb;
 
 
     @Override
@@ -36,17 +38,27 @@ public class ArticleActivity extends AppCompatActivity {
         Article article = Parcels.unwrap(getIntent().getParcelableExtra("article"));
         WebView webView = (WebView) findViewById(R.id.wvArticle);
 
+        pb = (ProgressBar) findViewById(R.id.pbLoading);
+        pb.getIndeterminateDrawable().setColorFilter(
+                getResources().getColor(R.color.colorProgress),
+                android.graphics.PorterDuff.Mode.SRC_IN);
+        pb.setVisibility(ProgressBar.VISIBLE);
+
         if (webView != null) {
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     view.loadUrl(url);
+                    pb.setVisibility(ProgressBar.INVISIBLE);
                     return true;
                 }
+                //pb.setVisibility(ProgressBar.INVISIBLE);
             });
 
             String url = article.getWebUrl();
+            //pb.setVisibility(ProgressBar.INVISIBLE);
             webView.loadUrl(url);
+            //pb.setVisibility(ProgressBar.INVISIBLE);
         }
         ButterKnife.bind(this);
     }

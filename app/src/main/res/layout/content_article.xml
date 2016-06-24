@@ -15,7 +15,14 @@
     <WebView
         android:id="@+id/wvArticle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></WebView>
+        android:layout_height="match_parent"/>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:visibility="visible"
+        android:scaleType="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
 </RelativeLayout>

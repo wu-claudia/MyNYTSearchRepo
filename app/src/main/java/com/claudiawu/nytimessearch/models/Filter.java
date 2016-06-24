@@ -50,7 +50,10 @@ public class Filter{
         news_desk = "news_desk:(";
         if (array_news_desk.size() !=0) {
             for (String item: array_news_desk) {
-                news_desk += item + " ";
+                if (array_news_desk.size() > 1) {
+                    news_desk += item + " ";
+                }
+                news_desk += item;
             }
         }
         //news_desk.trim();
