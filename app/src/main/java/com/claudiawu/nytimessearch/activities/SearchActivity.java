@@ -57,7 +57,6 @@ public class SearchActivity extends AppCompatActivity {
     int numCols;
     StaggeredGridLayoutManager gridLayoutManager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +78,11 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new ArticleArrayAdapter(articles);
         rvResults.setItemAnimator(new SlideInUpAnimator());
         rvResults.setAdapter(adapter);
-        gridLayoutManager = new StaggeredGridLayoutManager(Math.max(4,numCols), StaggeredGridLayoutManager.VERTICAL);
+        if (numCols != 0) {
+            gridLayoutManager = new StaggeredGridLayoutManager(numCols, StaggeredGridLayoutManager.VERTICAL);
+        } else {
+            gridLayoutManager = new StaggeredGridLayoutManager(Math.max(4,numCols), StaggeredGridLayoutManager.VERTICAL);
+        }
         rvResults.setLayoutManager(gridLayoutManager);
         rvResults.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
@@ -199,14 +202,14 @@ public class SearchActivity extends AppCompatActivity {
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         //Log.d("DEBUG",response.toString());
                         JSONArray articleJsonResults = null;
-                        //pd.dismiss();
+                        pd.dismiss();
                         try {
                             if (page == 0) {
                                 articles.clear();
                             }
                             articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
                             articles.addAll(Article.fromJSONArray(articleJsonResults));
-                            pd.dismiss();
+                            //pd.dismiss();
                             adapter.notifyDataSetChanged();
                             Log.d("DEBUG",articles.toString());
                         } catch (JSONException e) {

@@ -88,8 +88,8 @@ public class FilterActivity extends AppCompatActivity {
 
         Filter filter = new Filter();
         filter.setArt(isArts);
-        filter.setFashion(isFashion);
-        filter.setSports(isSports);
+        filter.setArt(isFashion);
+        filter.setArt(isSports);
         filter.setArray_news_desk(isArts,isFashion,isSports);
         filter.setDate(date);
         filter.setSpinnerVal(spinnerVal);
@@ -112,19 +112,19 @@ public class FilterActivity extends AppCompatActivity {
         switch(view.getId()) {
             case R.id.checkbox_arts:
                 if (checked) {
-                    isArts = true;
+                    isArts=true;
                     //Toast.makeText(getApplicationContext(),"Chose arts!", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.checkbox_fashion:
                 if (checked) {
-                    isFashion = true;
+                    isFashion=true;
                     //Toast.makeText(getApplicationContext(),"Chose fashion!", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.checkbox_sports:
                 if (checked) {
-                    isSports = true;
+                    isSports=true;
                     //Toast.makeText(getApplicationContext(),"Chose sports!", Toast.LENGTH_SHORT).show();
                 }
                 break;

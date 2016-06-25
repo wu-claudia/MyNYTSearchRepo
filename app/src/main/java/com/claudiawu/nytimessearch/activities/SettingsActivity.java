@@ -3,7 +3,6 @@ package com.claudiawu.nytimessearch.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
 
@@ -25,7 +24,7 @@ public class SettingsActivity extends AppCompatActivity{
     public void onSubmit(View v) {
         String spinnerVal = spinner.getSelectedItem().toString();
         int numCols = Integer.parseInt(spinnerVal);
-        Log.d("numCols", String.valueOf(numCols));
+        //Log.d("numCols", String.valueOf(numCols));
         Intent data = new Intent();
         data.putExtra("setting", numCols);
         //startActivity(data);
